@@ -1,3 +1,22 @@
+"""
+Author: ByteProductions
+
+Time Attack Andy
+
+Time Attack Andy is a basic 2D platformer with one main objective: Get to the end of the stage in as few deaths as possible. The player will
+navigate through the map, avoiding any obstacles in the path, and collect the required amount of coins for progression. They will have to do so
+before the stage timer runs out, or else they will die. Time Attack Andy engages the player through challenging platforming sequences and provides
+urgency through the short time frames allowed for precise platforming.
+
+Pre-Release 2
+    - Buffed players base speed from 3 to 4
+    - Slightly modified level design in stage 6
+    - increased timer on most levels. This is now the "Normal" difficulty.
+    - added a Hard and Normal difficulty, as well as a way to toggle between the two.
+    - added ability to see interface controls from main page.
+    - adjusted it so map is scaled according to the screen width, and not a fixed constant.
+"""
+
 import arcade
 import os
 import sys
@@ -13,12 +32,10 @@ PLAYER_JUMP_VELOCITY = 10
 MAX_JUMPS = 2
 BASE_HORIZONTAL_PIXELS = 640
 BASE_VERTICAL_PIXELS = 360
-# Gemini edited this. Commented out old SCALE_FACTOR as cameras handle scaling now.
-# SCALE_FACTOR = WINDOW_WIDTH // BASE_HORIZONTAL_PIXELS
+SCALE_FACTOR = WINDOW_WIDTH // BASE_HORIZONTAL_PIXELS
 
 print("INITIALIZING...")
-# Gemini edited this. Updated print to remove SCALE_FACTOR reference.
-print(f"WINDOW_WIDTH: {WINDOW_WIDTH}\nWINDOW_HEIGHT: {WINDOW_HEIGHT}")
+print(f"WINDOW_WIDTH: {WINDOW_WIDTH}\nWINDOW_HEIGHT: {WINDOW_HEIGHT}\nSCALE_FACTOR: { SCALE_FACTOR }")
 
 
 class GameView(arcade.View):
@@ -39,7 +56,7 @@ class GameView(arcade.View):
         super().__init__()
 
         # Initializing full screen state.
-        self.fullscreen_mode = False
+        self.fullscreen_mode = True
         self.window.set_fullscreen(self.fullscreen_mode)
 
         # Setting initial background color.
@@ -72,10 +89,6 @@ class GameView(arcade.View):
         # Loading font that will be used for game.
         arcade.load_font(self.resource_path("assets/PublicPixel-rv0pA.ttf"))
         
-        # Gemini edited this. Initializing game and GUI cameras for Arcade 3.3.3.
-        self.game_camera = arcade.camera.Camera2D()
-        self.gui_camera = arcade.camera.Camera2D()
-
         # Setting up rest of game logic.
         self.reset()
 
@@ -115,22 +128,9 @@ class GameView(arcade.View):
     def reset(self):
         """Resets the game to the initial state."""
 
-        # Gemini edited this. Configure Camera Viewport to stretch 360p to full window size.
-        sw, sh = BASE_HORIZONTAL_PIXELS, BASE_VERTICAL_PIXELS
-        self.game_camera.projection = arcade.LRBT(0, sw, 0, sh)
-        self.game_camera.viewport = arcade.LRBT(0, self.window.width, 0, self.window.height)
-        
-        # Gemini edited this. Anchor cameras to (0, 0) to prevent top-right quadrant zoom.
-        self.game_camera.position = (0, 0)
-        self.gui_camera.projection = arcade.LRBT(0, sw, 0, sh)
-        self.gui_camera.viewport = arcade.LRBT(0, self.window.width, 0, self.window.height)
-        self.gui_camera.position = (0, 0)
-
         # Initializing the map.
         MAP_FILE = self.resource_path(os.path.join("assets/stage_files", f"taa_stage_{self.stage_level}.tmx")) # concatentate string with the level number. have naming convention where file ends with the level number.
-        # Gemini edited this. Changed scaling to 1.0 since camera viewport handles zoom.
-        self.map = arcade.TileMap(MAP_FILE, scaling = 1)
-        # self.map = arcade.TileMap(MAP_FILE, scaling = SCALE_FACTOR)
+        self.map = arcade.TileMap(MAP_FILE, scaling = SCALE_FACTOR)
         #self.map = arcade.TileMap(MAP_FILE, scaling = 2.5)
         self.stage_time = self.stage_time_list[self.stage_level + self.difficulty]
 
@@ -151,19 +151,14 @@ class GameView(arcade.View):
 
         # Moving the portal offscreen so player can't interact with it. (will return to screen when player collects all coins in a stage.)
         for section in self.portal:
-            # Gemini edited this. Use virtual dimensions for portal offset.
-            section.center_x -= BASE_HORIZONTAL_PIXELS
-            section.center_y -= BASE_VERTICAL_PIXELS        
-            # section.center_x -= self.width
-            # section.center_y -= self.height        
+            section.center_x -= self.width
+            section.center_y -= self.height        
         
         self.portal_hidden = True
 
         # Initializing the player and some key attributes.
         self.players = arcade.SpriteList()
-        # Gemini edited this. Changed scaling to 1.0.
-        self.player = arcade.Sprite(self.resource_path("assets/player_textures/player.png"), scale = 1.0) # giving player blob texture.
-        # self.player = arcade.Sprite(self.resource_path("assets/player_textures/player.png"), scale = SCALE_FACTOR) # giving player blob texture.
+        self.player = arcade.Sprite(self.resource_path("assets/player_textures/player.png"), scale = SCALE_FACTOR) # giving player blob texture.
         
         start_x = self.starting_position[0].center_x #+ 18   # Setting up starting position.
         start_y = self.starting_position[0].center_y        # Determined by position of starting tile in map.
@@ -189,19 +184,14 @@ class GameView(arcade.View):
         # Clear the scene every frame.
         self.clear()
 
-        # Gemini edited this. Activate game camera before drawing world objects.
-        self.game_camera.use()
-
         # Draw the map every frame.
         for layer in self.map.sprite_lists:
-            self.map.sprite_lists[layer].draw(pixelated=True)
+            self.map.sprite_lists[layer].draw()
         
         # Drawing the player.
-        self.players.draw(pixelated=True)
+        self.players.draw()
 
         # Drawing the GUI.
-        # Gemini edited this. Use dedicated GUI camera for HUD.
-        self.gui_camera.use()
         
         if self.start:
             self.gui_timer.draw()
@@ -245,11 +235,11 @@ class GameView(arcade.View):
             self.total_time += delta_time
 
         # Update GUI
-        self.gui_timer.text = "Time: " + str(round(self.stage_time))
-        self.gui_death_count.text = "Deaths: " + str(self.deaths)
-        self.gui_remaining_coins.text = "Coins Left: " + str(self.coins_to_collect - self.coins_collected)
-        self.gui_stage_level.text = "Level " + str(self.stage_level)
-        self.gui_total_time.text = "Total Time: " + str(round(self.total_time, 2))
+        self.gui_timer.value = "Time: " + str(round(self.stage_time))
+        self.gui_death_count.value = "Deaths: " + str(self.deaths)
+        self.gui_remaining_coins.value = "Coins Left: " + str(self.coins_to_collect - self.coins_collected)
+        self.gui_stage_level.value = "Level " + str(self.stage_level)
+        self.gui_total_time.value = "Total Time: " + str(round(self.total_time, 2))
 
         # Check stage timer. Reset level if time runs out.
         if self.stage_time < 0:
@@ -260,15 +250,13 @@ class GameView(arcade.View):
         pl.player_movement(self.player, self.PLAYER_HEIGHT_DEFAULT, self.keys)
 
         # Check if player is in bounds of map.
-        # Gemini edited this. Use virtual dimensions for bounds check.
-        if pl.player_out_of_bounds(self.player, BASE_HORIZONTAL_PIXELS, BASE_VERTICAL_PIXELS):
-        # if pl.player_out_of_bounds(self.player, self.width, self.height):
+        if pl.player_out_of_bounds(self.player, self.width, self.height):
             self.deaths = pl.player_dies_sequence(self.deaths)
             self.reset()
 
         # Check if player collected coins. If so, update counter and remove them from screen.
         self.coins_collected = envl.collect_coin(self.player, self.coins, self.coins_collected)
-        self.gui_remaining_coins.text  = "Coins Left: " + str(self.coins_to_collect - self.coins_collected)
+        self.gui_remaining_coins.value  = "Coins Left: " + str(self.coins_to_collect - self.coins_collected)
 
         # Animate coin sprites.
         self.animation_clock += delta_time
@@ -301,11 +289,8 @@ class GameView(arcade.View):
         # Check if portal can return to main screen.
         if envl.check_coins_collected(self.coins_collected, self.coins_to_collect) and self.portal_hidden:
             for section in self.portal:
-                # Gemini edited this. Use virtual dimensions for portal return.
-                section.center_x += BASE_HORIZONTAL_PIXELS
-                section.center_y += BASE_VERTICAL_PIXELS
-                # section.center_x += self.width
-                # section.center_y += self.height
+                section.center_x += self.width
+                section.center_y += self.height
 
             self.portal_hidden = not self.portal_hidden
 
@@ -355,8 +340,6 @@ class GameView(arcade.View):
         if key == arcade.key.F11:
             self.fullscreen_mode = not self.fullscreen_mode
             self.window.set_fullscreen(self.fullscreen_mode)
-            # Gemini edited this. Re-call reset to update camera viewport for new window size.
-            self.reset()
 
         # Player jumping mechanism.
         if key == arcade.key.SPACE and self.JUMP_COUNTER < MAX_JUMPS:
@@ -452,9 +435,8 @@ class GameView(arcade.View):
 
 def main():
     """ Contains the logic for launching and running the game. """
-    # Gemini edited this. Use Detected Window Width/Height to span entire monitor.
-    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
-    # window = arcade.Window(BASE_HORIZONTAL_PIXELS, BASE_VERTICAL_PIXELS, WINDOW_TITLE)
+    # Create a Window object. This is what actually shows up on screen
+    window = arcade.Window(BASE_HORIZONTAL_PIXELS, BASE_VERTICAL_PIXELS, WINDOW_TITLE)
 
     # Associate the main GameView with the Window
     game = GameView()
