@@ -123,20 +123,20 @@ def unique_stage_logic(stage_level: int, player: arcade.Sprite, entities: arcade
     '''
 
     if stage_level == 4:
-            move_floating_enemies(player, entities, 11)
+            move_floating_enemies(player, entities, 5.5)
             return arcade.color.DARK_OLIVE_GREEN
 
     elif stage_level == 8:
             return arcade.color.GRAY
 
     elif stage_level == 10:
-            move_floating_enemies(player, entities, 3)
+            move_floating_enemies(player, entities, 1.5)
 
     elif stage_level == 11:
             return arcade.color.SKY_BLUE
     
     elif stage_level == 14:
-            move_floating_enemies(player, entities, 8)
+            move_floating_enemies(player, entities, 4)
             return arcade.color.DESERT_SAND
 
     elif stage_level == 15:
