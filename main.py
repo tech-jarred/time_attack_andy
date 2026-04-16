@@ -5,17 +5,27 @@ import assets.environment_logic as envl
 import assets.player_logic as pl
 
 
-# Constants
+### Constants ###
+# Window Constants
 WINDOW_WIDTH, WINDOW_HEIGHT = arcade.window_commands.get_display_size()
 WINDOW_TITLE = "Time Attack Andy"
-GRAVITY = 0.5
-PLAYER_JUMP_VELOCITY = 7
-PLAYER_MOVE_ACCEL = 0.7
-PLAYER_FRICTION = 0.7
-SPRINT_VELOCITY = 2
-MAX_JUMPS = 2
 BASE_HORIZONTAL_PIXELS = 640
 BASE_VERTICAL_PIXELS = 360
+
+# Environment Constants
+GRAVITY = 0.5
+
+# Player Movement Constants
+PLAYER_JUMP_VELOCITY = 5.5
+PLAYER_MOVE_ACCEL = 0.7
+PLAYER_FRICTION = 0.6
+
+CRAWL_VELOCITY = 0.5
+NORMAL_VELOCITY = 1.5
+SPRINT_VELOCITY = 2.5
+
+MAX_JUMPS = 2
+### END CONSTANTS ###
 
 # For debugging purposes, log recorded height of monitor.
 print("INITIALIZING...")

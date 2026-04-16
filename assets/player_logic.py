@@ -7,10 +7,9 @@ import sys
 import os
 from math import fabs
 
-# Setting up different player speeds.
-NORMAL_VELOCITY = 4 # Establishing important
-from main import PLAYER_MOVE_ACCEL, PLAYER_FRICTION, SPRINT_VELOCITY
-CRAWL_VELOCITY = 1    # about player.
+# Import player movement information from main.
+from main import PLAYER_MOVE_ACCEL, PLAYER_FRICTION, CRAWL_VELOCITY, NORMAL_VELOCITY, SPRINT_VELOCITY
+
 
 def resource_path(relative_path):
         """ Get absolute path to resource, works for dev and PyInstaller """
