@@ -412,11 +412,11 @@ class GameView(arcade.View):
             self.dev_mode = True
 
         if self.dev_mode and key == arcade.key.UP:
-            self.stage_level += 1
+            self.stage_level = (self.stage_level % 22) + 1
             self.reset()
         
         if self.dev_mode and key == arcade.key.DOWN:
-            self.stage_level -= 1
+            self.stage_level = (self.stage_level % 22) - 1
             self.reset()
 
         # Adjust the music volume.
