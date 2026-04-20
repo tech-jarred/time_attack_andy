@@ -21,33 +21,21 @@ def resource_path(relative_path):
 # Loading sounds that will be used for environment interactions.
 coin_collect_sound = arcade.load_sound(resource_path("assets/sounds/coin1.wav"))
 
-def add_coin_textures(coins: arcade.SpriteList) -> None:
-     '''
-     Add the additional textures for coin animation.
-     '''
-     for coin in coins:
-        coin.textures.append(arcade.load_texture(resource_path("assets/coin_textures/coin_rotate_1.png")))
-        coin.textures.append(arcade.load_texture(resource_path("assets/coin_textures/coin_rotate_2.png")))
-        coin.textures.append(arcade.load_texture(resource_path("assets/coin_textures/coin_rotate_3.png")))
-
+def setup_animated_coins(coins: arcade.SpriteList, textures: arcade.SpriteSheet) -> None:
+    '''
+    Assigns the pre-loaded texture list to each coin sprite in a stage once.
+    '''
+    # Load coin textures onto coins.
+    for coin in coins:
+        coin.textures = textures
 
 def animate_coin(animation_clock: float, coins: arcade.SpriteList) -> None:
     ''' 
     Takes in animation_clock, the amount of time passed in an animation cycle. 
     Adjusts the coins sprite to the correct texture based on time passed in animation cycle.
     '''
-    
-    # Setting an animation frame.
-    coin_animation_frame = 0
-        
-    if animation_clock < 0.25:
-        coin_animation_frame = 0
-    elif animation_clock < 0.5:
-        coin_animation_frame = 1
-    elif animation_clock < 0.75:
-        coin_animation_frame = 2
-    elif animation_clock < 1:
-        coin_animation_frame = 3
+    # Determine which stage of the coin animation we are at.
+    coin_animation_frame = int(animation_clock * 4) % 4
     
     # Updating coins to match animation frame.    
     for coin in coins:
@@ -140,7 +128,6 @@ def unique_stage_logic(stage_level: int, player: arcade.Sprite, entities: arcade
     
     # Handle Animations for Level 15
     if stage_level == 15:
-        add_coin_textures(entities)
         animate_coin(animation_clock, entities)
         
     # Return new color if defined, otherwise keep existing

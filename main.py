@@ -25,6 +25,10 @@ NORMAL_VELOCITY = 1.5
 SPRINT_VELOCITY = 2.5
 
 MAX_JUMPS = 2
+
+# Texture Constants
+COIN_TEXTURE = arcade.load_spritesheet(envl.resource_path("assets/coin_textures/coin_tilesheet.png"), sprite_width = 18, sprite_height = 18, columns = 4, count = 4)
+EVIL_COIN_TEXTURE = arcade.load_spritesheet(envl.resource_path("assets/coin_textures/evil_coin_tilesheet.png"), sprite_width = 18, sprite_height = 18, columns = 4, count = 4)
 ### END CONSTANTS ###
 
 # For debugging purposes, log recorded height of monitor.
@@ -157,8 +161,12 @@ class GameView(arcade.View):
         self.portal = self.map.sprite_lists["portal"]
 
         # Adding different textures for coin animation.
-        envl.add_coin_textures(self.coins)
+        envl.setup_animated_coins(self.coins, COIN_TEXTURE)
         self.animation_clock = 0
+
+        # Add different textures for evil coin entities.
+        if self.stage_level == 15:
+            envl.setup_animated_coins(self.enemies, EVIL_COIN_TEXTURE)
 
         # Determine amount of coins to collect in the stage.
         self.coins_to_collect = len(self.coins)
