@@ -48,7 +48,7 @@ def player_movement(player: arcade.Sprite, player_height: float, keys: set) -> N
         velocity = SPRINT_VELOCITY
         player.height = PLAYER_HEIGHT_SPRINT
 
-    elif arcade.key.LCTRL in keys:
+    elif arcade.key.LCTRL in keys or arcade.key.RCTRL in keys:
         velocity = CRAWL_VELOCITY
         player.height = PLAYER_HEIGHT_CRAWL
     
