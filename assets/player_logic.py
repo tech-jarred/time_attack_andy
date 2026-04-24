@@ -72,8 +72,9 @@ def player_movement(player: arcade.Sprite, player_height: float, keys: set) -> N
         player.change_x *= PLAYER_FRICTION
     
     # To prevent player from infinitely moving, set a cap for when they hard stop.
-    if abs(player.change_x) < 0.01:
-        player.change_x = 0
+    # if abs(player.change_x) < 0.01:
+    #     player.change_x = 0
+    # may reconsider implementing this in future, but need to figure out a different solution so animations are done correctly.
     
     
 
@@ -82,17 +83,17 @@ def animate_player(player: arcade.Sprite, physics_engine: arcade.PhysicsEnginePl
     '''
     Animate the player in response to their movement.
     '''
-    if physics_engine.can_jump() and player.change_x > 0:
+    if physics_engine.can_jump() and player.change_x > 0: # changes to right movement texture while on ground
         player.set_texture(0)
-    elif physics_engine.can_jump() and player.change_x < 0:
+    elif physics_engine.can_jump() and player.change_x < 0: # changes to left movement texture while on ground
         player.set_texture(1)
-    elif player.change_y > 0 and player.change_x > 0:
+    elif player.change_y > 0 and player.change_x > 0: # changes to jumping up right movement texture
             player.set_texture(2)
-    elif player.change_y > 0 and player.change_x < 0:
+    elif player.change_y > 0 and player.change_x < 0: # changes to jumping up left movement texture
         player.set_texture(3)
-    elif player.change_y < 0 and player.change_x > 0:
+    elif player.change_y < 0 and player.change_x > 0: # changes to falling right movement texture
         player.set_texture(4)
-    elif player.change_y < 0 and player.change_x < 0:
+    elif player.change_y < 0 and player.change_x < 0: # changes to falling left movement texture
         player.set_texture(5)
 
 
