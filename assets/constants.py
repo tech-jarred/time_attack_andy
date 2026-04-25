@@ -30,7 +30,7 @@ STAGE_CONFIG = {
     4:  {"color": color.DARK_OLIVE_GREEN, "speed": 5.5},
     8:  {"color": color.GRAY},
     10: {"speed": 1.5},
-    11: {"color": color.SKY_BLUE},
+    11: {"color": color.PASTEL_BLUE},
     14: {"color": color.DESERT_SAND, "speed": 4},
     16: {"color": color.BABY_PINK},
     18: {"color": color.YELLOW_ORANGE},
