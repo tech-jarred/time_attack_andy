@@ -429,8 +429,9 @@ class GameView(arcade.View):
                 print("Normal Mode Enabled")
         
         # For dev purposes.
-        if key == arcade.key.BACKSLASH:
+        if key == arcade.key.BACKSLASH and not self.stage_level == 21:
             self.dev_mode = True
+            print(f"DEV Mode: {self.dev_mode}")
 
         if self.dev_mode and key == arcade.key.UP:
             self.stage_level = (self.stage_level % 22) + 1
@@ -488,7 +489,7 @@ class GameView(arcade.View):
             self.total_time = 0
             self.dev_mode = False
             self.start = False
-            self.background_color = arcade.color.DARK_BROWN 
+            self.background_color = arcade.color.DARK_BROWN if self.difficulty == -1 else arcade.color.DARK_RED 
 
 def main():
     """ Contains the logic for launching and running the game. """
