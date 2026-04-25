@@ -445,13 +445,13 @@ class GameView(arcade.View):
 
         # Adjust the music volume.
         if key == arcade.key.F10:
-            self.music_volume += 0.1
+            self.music_volume += 0.05
             if self.music_volume >= 1: # hard cap to prevent music volume from going above 1.
                 self.music_volume = 1
             self.background_music.set_volume(self.music_volume, self.music_player)
             
         if key == arcade.key.F9:
-            self.music_volume -= 0.1
+            self.music_volume -= 0.05
             if self.music_volume <= 0: # hard cap to prevent volume from looping around.
                 self.music_volume = 0
             self.background_music.set_volume(self.music_volume, self.music_player)
