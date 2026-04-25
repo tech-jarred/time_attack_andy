@@ -6,7 +6,7 @@ import os
 import sys
 from random import randint
 from math import sin, cos, fabs
-from assets.constants import resource_path
+from assets.constants import resource_path, STAGE_CONFIG
 
 # Loading sounds that will be used for environment interactions.
 coin_collect_sound = arcade.load_sound(resource_path("assets/sounds/coin1.wav"))
@@ -98,17 +98,6 @@ def move_floating_enemies(player: arcade.Sprite, enemies: arcade.SpriteList, spe
 
 # Define a mapping of colors and special behaviors.
 # Is a dictionary where key is stage level and value is another dictionary with properties.
-STAGE_CONFIG = {
-    1:  {"color": arcade.color.DARK_BROWN},
-    4:  {"color": arcade.color.DARK_OLIVE_GREEN, "speed": 5.5},
-    8:  {"color": arcade.color.GRAY},
-    10: {"speed": 1.5},
-    11: {"color": arcade.color.SKY_BLUE},
-    14: {"color": arcade.color.DESERT_SAND, "speed": 4},
-    16: {"color": arcade.color.BABY_PINK},
-    18: {"color": arcade.color.YELLOW_ORANGE},
-    20: {"color": arcade.color.BLUEBERRY}
-}
 
 def unique_stage_logic(stage_level: int, player: arcade.Sprite, entities: arcade.SpriteList, animation_clock: float, background_color: arcade.color) -> arcade.color:
     config = STAGE_CONFIG.get(stage_level, {})

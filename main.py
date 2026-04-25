@@ -67,7 +67,7 @@ class GameView(arcade.View):
         
         # Setting initial background color.
         # Setting background color
-        self.background_color = arcade.color.DARK_BROWN if self.difficulty == -1 else arcade.color.LAVA
+        self.background_color = arcade.color.DARK_BROWN if self.difficulty == -1 else arcade.color.DARK_RED
 
         # Initializing death counter.
         self.deaths = 0
@@ -244,7 +244,7 @@ class GameView(arcade.View):
                 self.final_deaths.draw()
                 self.instructions.draw()
             else:
-                self.background_color = arcade.color.DARK_RED
+                self.background_color = arcade.color.DARK_PASTEL_RED
                 self.sorry.draw()
                 self.instructions.draw()
 
@@ -404,7 +404,7 @@ class GameView(arcade.View):
             self.total_time = 0
             self.dev_mode = False
             self.start = False
-            self.background_color = arcade.color.DARK_BROWN if self.difficulty == -1 else arcade.color.LAVA
+            self.background_color = arcade.color.DARK_BROWN if self.difficulty == -1 else arcade.color.DARK_RED
         
         # Start game.
         if self.stage_level == 0 and key == arcade.key.B:
@@ -421,7 +421,7 @@ class GameView(arcade.View):
         if self.stage_level == 0 and key == arcade.key.M and not self.dev_mode:
             if self.difficulty == -1:
                 self.difficulty = 20
-                self.background_color = arcade.color.LAVA
+                self.background_color = arcade.color.DARK_RED
                 print("Hard Mode Enabled")
             else:
                 self.difficulty = -1
@@ -446,10 +446,14 @@ class GameView(arcade.View):
         # Adjust the music volume.
         if key == arcade.key.F10:
             self.music_volume += 0.1
+            if self.music_volume >= 1: # hard cap to prevent music volume from going above 1.
+                self.music_volume = 1
             self.background_music.set_volume(self.music_volume, self.music_player)
             
         if key == arcade.key.F9:
             self.music_volume -= 0.1
+            if self.music_volume <= 0: # hard cap to prevent volume from looping around.
+                self.music_volume = 0
             self.background_music.set_volume(self.music_volume, self.music_player)
 
         # Allow player to see the controls.
