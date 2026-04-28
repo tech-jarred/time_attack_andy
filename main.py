@@ -357,7 +357,7 @@ class GameView(arcade.View):
             if not self.dev_mode:
                 self.final_time = arcade.Text(f"Your final time was {round(self.total_time, 2)}", 400, 125, arcade.color.BEIGE, 10, font_name = "Public Pixel", bold = True, anchor_x = "center")
                 self.final_deaths = arcade.Text(f"Your final deaths was {self.deaths}", 400, 75, arcade.color.BEIGE, 10, font_name = "Public Pixel", bold = True,  anchor_x = "center")
-                self.instructions = arcade.Text("Thank you for playing my game! Click to play again!", 400, 25, arcade.color.BEIGE, 10, font_name = "Public Pixel", width = 500, bold = True, anchor_x = "center", multiline = True)
+                self.instructions = arcade.Text("Thank you for playing my game! Click to play again!", 400, 25, arcade.color.BEIGE, 10, font_name = "Public Pixel", width = 448, bold = True, anchor_x = "center", multiline = True)
             else:
                 self.sorry = arcade.Text(f"Sorry, you are in DEV mode and can not get a final time or death count. :(", 400, 125, arcade.color.BEIGE, 10, font_name = "Public Pixel", width = 448, bold = True, anchor_x = "center", multiline = True)
                 self.instructions = arcade.Text("Thank you for playing my game! Click to play again!", 400, 75, arcade.color.BEIGE, 10, font_name = "Public Pixel", width = 448, bold = True, anchor_x = "center", multiline = True)
