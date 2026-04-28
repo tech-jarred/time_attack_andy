@@ -103,6 +103,9 @@ class GameView(arcade.View):
         # Setting the player height constant (needed player to be initialized first.)
         self.PLAYER_HEIGHT_DEFAULT = self.player.height
 
+        # Loading portal noise.
+        self.portal_sound = arcade.load_sound(const.resource_path("assets/sounds/upgrade5.wav"))
+
         # Loading background music.
         self.background_music = arcade.Sound(self.resource_path("assets/sounds/jungle_driver.mp3"))
 
@@ -341,6 +344,7 @@ class GameView(arcade.View):
 
         # Check if player entered portal. If so, move player to next level
         if not self.portal_hidden and envl.check_for_environment_contact(self.player, self.portal):
+            arcade.play_sound(self.portal_sound)
             self.stage_level += 1
             self.reset()
         
